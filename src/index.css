@@ -2,3 +2,12 @@ svg {
   border: 1px solid #ccc;
   margin-top: 20px;
 }
+
+.margin {
+  margin-left: 50px;
+  margin-right: 50px;
+}
+
+.alignment {
+  text-align: center;
+}

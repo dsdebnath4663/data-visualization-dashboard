@@ -2,10 +2,13 @@ import { useEffect, useState } from "react";
 import fetchData from "../services/fetchData";
 import Filters from "./Filters";
 import LineChart from "./charts/LineChart";
-import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
+import HorizontalBarChart from "./charts/HorizontalBarChart";
+import { Col } from "react-bootstrap";
+import VerticalBarChart from "./charts/VerticalBarChart";
+import DonutChart from "./charts/DonutChart";
+import PieChart from "./charts/PieChart";
 
-// l̥function Dashboard() {
 const Dashboard = () => {
   const [data, setData] = useState([]);
   const [filters, setFilters] = useState({
@@ -28,25 +31,14 @@ const Dashboard = () => {
       const data = await fetchData();
       setData(data);
 
-
       const uniqueValues = {};
-
-
-      // Object.keys(filters).forEach((key) => {
-      //   const values = Array.from(new Set(data.map((item) => item[key])));
-      //   uniqueValues[key] = values;
-      // });
-
-
       for (const key of Object.keys(filters)) {
         const valueSet = new Set();
-
         for (const item of data) {
           const value = item[key];
           // console.log(key+" : " + value)
           valueSet.add(value);
         }
-
         uniqueValues[key] = Array.from(valueSet);
       }
 
@@ -59,7 +51,6 @@ const Dashboard = () => {
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
     setFilters({ ...filters, [name]: value, });
-
     // console.log(JSON.stringify(filters));
   };
 
@@ -85,22 +76,45 @@ const Dashboard = () => {
 
 
   return (
-    <Container>
+    <div className="margin">
+
+      <h1 className="alignment">Data Visualization Dashboard  </h1>
+      <Filters
+        filters={filters}
+        onFilterChange={handleFilterChange}
+        uniqueValues={uniqueValues}
+      />
 
       <Row>
-        <h1>Data Visualization Dashboard
+        <Col>
+          <LineChart data={filteredData} />
+        </Col>
+        <Col>
+          <HorizontalBarChart data={filteredData} />
+        </Col>
+      </Row>
 
-        </h1>
-        <Filters
-          filters={filters}
-          onFilterChange={handleFilterChange}
-          uniqueValues={uniqueValues}
-        />
-        <LineChart data={filteredData} />
+      <Row>
+        <Col>
+          <VerticalBarChart data={filteredData} />
+        </Col>
+        <Col>
+          <DonutChart data={filteredData} />
+        </Col>
+        <Col>
+          <PieChart data={filteredData} />
+        </Col>
       </Row>
 
 
-    </Container>
+
+
+
+
+
+
+
+    </div>
   )
 }
 
